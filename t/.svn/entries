@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="14"
+   name=""
+   committed-date="2006-08-17T15:21:09.329222Z"
+   url="http://code.toeat.com/repo/RPC-JSON/trunk/t"
+   last-author="jshirley"
+   kind="dir"
+   uuid="399324a2-6c16-0410-9763-f8e9a5500e10"
+   revision="14"/>
+<entry
+   committed-rev="14"
+   name="01use.t"
+   text-time="2006-08-18T12:56:33.000000Z"
+   committed-date="2006-08-17T15:21:09.329222Z"
+   checksum="0a947ffec3a436c0d4c993885f43be32"
+   last-author="jshirley"
+   kind="file"
+   prop-time="2006-08-18T12:56:33.000000Z"/>
+<entry
+   committed-rev="14"
+   name="03podcoverage.t"
+   text-time="2006-08-18T12:56:33.000000Z"
+   committed-date="2006-08-17T15:21:09.329222Z"
+   checksum="da387d2608a8a00100ccce5ad12933aa"
+   last-author="jshirley"
+   kind="file"
+   prop-time="2006-08-18T12:56:33.000000Z"/>
+<entry
+   committed-rev="14"
+   name="pt"
+   text-time="2006-08-18T12:56:33.000000Z"
+   committed-date="2006-08-17T15:21:09.329222Z"
+   checksum="f21402ee9b30ea916f555db7a06318f4"
+   last-author="jshirley"
+   kind="file"
+   prop-time="2006-08-18T12:56:33.000000Z"/>
+<entry
+   committed-rev="14"
+   name="runtest"
+   text-time="2006-08-18T12:56:33.000000Z"
+   committed-date="2006-08-17T15:21:09.329222Z"
+   checksum="b16b6e132772bb932b7ea2bd34859360"
+   last-author="jshirley"
+   kind="file"
+   prop-time="2006-08-18T12:56:33.000000Z"/>
+<entry
+   committed-rev="14"
+   name="02connect.t"
+   text-time="2006-08-18T12:56:33.000000Z"
+   committed-date="2006-08-17T15:21:09.329222Z"
+   checksum="2f3a65f56cbf7ed43241b43960a28898"
+   last-author="jshirley"
+   kind="file"
+   prop-time="2006-08-18T12:56:33.000000Z"/>
+</wc-entries>

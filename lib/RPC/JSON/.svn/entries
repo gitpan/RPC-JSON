@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="14"
+   name=""
+   committed-date="2006-08-17T15:21:09.329222Z"
+   url="http://code.toeat.com/repo/RPC-JSON/trunk/lib/RPC/JSON"
+   last-author="jshirley"
+   kind="dir"
+   uuid="399324a2-6c16-0410-9763-f8e9a5500e10"
+   revision="14"/>
+<entry
+   committed-rev="14"
+   name="Shell.pm"
+   text-time="2006-08-18T12:56:33.000000Z"
+   committed-date="2006-08-17T15:21:09.329222Z"
+   checksum="64bf5d46f3f8845d8ee1ac94518b10e6"
+   last-author="jshirley"
+   kind="file"
+   prop-time="2006-08-18T12:56:33.000000Z"/>
+</wc-entries>
