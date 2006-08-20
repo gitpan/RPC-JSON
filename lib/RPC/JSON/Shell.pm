@@ -15,6 +15,38 @@ use Data::Dumper;
 
 my $rpcInstance;
 
+=head1 NAME
+
+RPC::JSON::Shell - Interactive JSON-RPC Shell
+
+=head1 SYNOPSIS
+
+    perl -MRPC::JSON -e "RPC::JSON::shell"
+
+    Not connected> connect http://www.dev.simplymapped.com/services/geocode/json.smd
+    GeocodeService > geocode "1600 Pennsylvania Ave Washington DC"
+    $VAR1 = [
+          {
+            'administrativearea' => 'DC',
+            'country' => 'US',
+            'longitude' => '-77.037691',
+            'subadministrativearea' => 'District of Columbia',
+            'locality' => 'Washington',
+            'latitude' => '38.898758',
+            'thoroughfare' => '1600 Pennsylvania Ave NW',
+            'postalcode' => 20004,
+            'address' => '1600 Pennsylvania Ave NW, Washington, DC 20004, USA'
+          }
+    ];
+
+=head1 DESCRIPTION
+
+This module is an interactive client to a JSON-RPC service.  It is currently
+in its infancy and is likely to be very unstable.  There are many bugs in this
+package.
+
+=cut
+
 sub shell {
     my ( $self ) = @_;
     my $term   = new Term::ReadLine 'RPC::JSON::Shell';
@@ -25,13 +57,32 @@ sub shell {
         s/^\s+|\s+$//g;
         my ( $method, @args ) = split(/\s+/, $_);
         $method = lc($method);
+        my @d = (); my $curArg;
+        foreach my $arg ( @args ) {
+            if ( $curArg and $arg =~ /"\s*$/ ) {
+                $curArg .= " $arg";
+                $curArg =~ s/^(\s*")|("\s*)$//g;
+                push @d, $curArg;
+                $curArg = '';
+            }
+            elsif ( $arg =~ /^\s*"/ and not $curArg ) {
+                $curArg = $arg;
+            }
+            elsif ( $curArg ) {
+                $curArg .= " $arg";
+            }
+            else {
+                push @d, $arg;
+            }
+        }
+
         if ( __PACKAGE__->can($method) ) {
-            __PACKAGE__->$method($out, @args);
+            __PACKAGE__->$method($out, @d);
         }
         elsif ( $method =~ /^quit|exit$/ ) {
             return 1;
         } elsif ( exists $rpcInstance->methods->{$method} ) {
-            __PACKAGE__->method($out, $method, @args);
+            __PACKAGE__->method($out, $method, @d);
         } else {
             print $out "Unrecognized command, type help for a list of commands\n";
         }

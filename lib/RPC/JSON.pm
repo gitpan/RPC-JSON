@@ -14,7 +14,7 @@ use URI::Heuristic qw(uf_uri);
 
 use vars qw|$VERSION @EXPORT $DEBUG $META $AUTOLOAD|;
 
-$VERSION = '0.01';
+$VERSION = '0.11';
 
 @RPC::JSON = qw|Exporter|;
 
@@ -24,6 +24,48 @@ $VERSION = '0.01';
 |;
 
 our $REQUEST_COUNT = 1;
+
+=head1 NAME
+
+RPC::JSON - JSON-RPC Client Library
+
+=head1 SYNOPSIS
+
+    use RPC::JSON;
+
+    my $jsonrpc = RPC::JSON->new(
+        "http://www.simplymapped.com/services/geocode/json.smd" );
+
+    # Imports a geocode(['address']) method:
+    $jsonrpc->geocode('1600 Pennsylvania Ave');
+
+Dumping this function returns whatever data was returned from the server.
+In this case:
+
+    $VAR1 = [
+        {
+            'administrativearea' => 'DC',
+            'country' => 'US',
+            'longitude' => '-77.037691',
+            'subadministrativearea' => 'District of Columbia',
+            'locality' => 'Washington',
+            'latitude' => '38.898758',
+            'thoroughfare' => '1600 Pennsylvania Ave NW',
+            'postalcode' => '20004',
+            'address' => '1600 Pennsylvania Ave NW, Washington, DC 20004, USA'
+         }
+    ];
+
+=head1 DESCRIPTION
+
+RPC::JSON aims to be a full-featured JSON-RPC client library that enables a
+client to connect to any JSON-RPC service and dispatch remote method calls.
+
+=head1 METHODS
+
+=over
+
+=cut
 
 sub shell {
     my ( $self ) = @_;
@@ -97,6 +139,12 @@ sub new {
     return $self;
 }
 
+=item set_smd
+
+Sets the current SMD file, via URI
+
+=cut
+
 sub set_smd {
     my ( $self, $smd ) = @_;
     my $uri;
@@ -113,6 +161,13 @@ sub set_smd {
     }
     $self->{smd} = $uri;
 }
+
+=item connect ?SMD?
+
+Connects to the specified SMD file, or whichever was configured with.  This
+will initialize the JSON-RPC service.
+
+=cut
 
 sub connect {
     my ( $self, $smd ) = @_;
@@ -297,6 +352,8 @@ sub AUTOLOAD {
     }
     return undef;
 }
+
+=back
 
 =head1 AUTHORS
 
