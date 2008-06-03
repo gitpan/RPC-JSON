@@ -48,15 +48,21 @@ package.
 =cut
 
 sub shell {
-    my ( $self ) = @_;
+    my ( $service ) = @_;
     my $term   = new Term::ReadLine 'RPC::JSON::Shell';
     my $prompt = "Not connected > ";
     my $out    = $term->OUT || \*STDOUT;
 
+    if ( $service ) {
+        __PACKAGE__->connect($out, $service);
+        if ( $rpcInstance and $rpcInstance->service ) {
+            $prompt = sprintf("%s > ", $rpcInstance->service);
+        }
+    }
+
     while ( defined ( $_ = $term->readline($prompt) ) ) {
         s/^\s+|\s+$//g;
         my ( $method, @args ) = split(/\s+/, $_);
-        $method = lc($method);
         my @d = (); my $curArg;
         foreach my $arg ( @args ) {
             if ( $curArg and $arg =~ /"\s*$/ ) {
@@ -76,15 +82,18 @@ sub shell {
             }
         }
 
-        if ( __PACKAGE__->can($method) ) {
-            __PACKAGE__->$method($out, @d);
+        if ( __PACKAGE__->can(lc($method)) ) {
+            my $l = lc($method);
+            __PACKAGE__->$l($out, @d);
         }
-        elsif ( $method =~ /^quit|exit$/ ) {
+        elsif ( $method =~ /^quit|exit$/i ) {
             return 1;
-        } elsif ( exists $rpcInstance->methods->{$method} ) {
+        }
+        elsif ( $rpcInstance->methods->{$method} ) {
             __PACKAGE__->method($out, $method, @d);
         } else {
-            print $out "Unrecognized command, type help for a list of commands\n";
+            print Dumper $rpcInstance->methods->{$method};
+            print $out "Unrecognized command $method, type help for a list of commands\n";
         }
         if ( $rpcInstance and $rpcInstance->service ) {
             $prompt = sprintf("%s > ", $rpcInstance->service);
@@ -120,6 +129,7 @@ Connect to the specified SMD URL
 sub connect {
     my ( $class, $out, @args ) = @_;
     if ( @args == 1 ) {
+        print $out "Connecting to $args[0]\n";
         if ( $rpcInstance ) {
             print $out "Closing previous RPC connection\n";
         }

@@ -14,7 +14,7 @@ use URI::Heuristic qw(uf_uri);
 
 use vars qw|$VERSION @EXPORT $DEBUG $META $AUTOLOAD|;
 
-$VERSION = '0.11';
+$VERSION = '0.12';
 
 @RPC::JSON = qw|Exporter|;
 
@@ -64,6 +64,12 @@ client to connect to any JSON-RPC service and dispatch remote method calls.
 =head1 METHODS
 
 =over
+
+=cut
+
+=item shell
+
+Instantiate a JSON-RPC shell
 
 =cut
 
@@ -206,7 +212,7 @@ sub load_smd {
     local $JSON::BareKey  = 1;
     local $JSON::QuotApos = 1;
     my $obj;
-    eval { $obj = jsonToObj($content) };
+    eval { $obj = from_json($content) };
     if ( $@ ) { 
         carp $@;
         return 0;
@@ -314,6 +320,8 @@ sub listen {
     }
 }
 
+# TODO: Remove this and create generated methods.  Although when we refresh
+# the methods will need to be removed.
 sub AUTOLOAD {
     my $self = shift;
     my ( $l ) = $AUTOLOAD;
@@ -328,16 +336,16 @@ sub AUTOLOAD {
         my $res = $self->{_ua}->post(
             $self->{serviceURL}->as_string,
             Content_Type => 'application/javascript+json',
-            Content      => objToJson($packet)
+            Content      => to_json($packet)
         );
         if ( $res->is_success ) {
             my $ret = {};
-            eval { $ret = jsonToObj($res->content); };
+            eval { $ret = from_json($res->content);};
             if ( $@ ) {
                 carp "Error parsing server response, but got acceptable status: $@";
             } else {
-                if ( $ret->{result} ) {
-                    my $result = jsonToObj($ret->{result});
+                my $result = $ret->{result};
+                if ( $result ) {
                     if ( $self->{bindings}->{$l} ) {
                         foreach my $binding ( @{$self->{bindings}->{$l}} ) {
                             &{$binding}($result);
@@ -357,7 +365,15 @@ sub AUTOLOAD {
 
 =head1 AUTHORS
 
-Copyright 2006 J. Shirley <jshirley@gmail.com>
+J. Shirley C<< <jshirley@gmail.com> >>
+
+=head1 CONTRIBUTORS
+
+Chris Carline
+
+=head1 LICENSE
+
+Copyright 2006 J. Shirley C<< <jshirley@gmail.com> >>
 
 This program is free software;  you can redistribute it and/or modify it under
 the same terms as Perl itself.  That means either (a) the GNU General Public

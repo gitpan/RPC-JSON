@@ -8,6 +8,9 @@ WriteMakefile(
     PREREQ_PM       => {
                             'JSON',
                             'LWP::UserAgent',
-                            'URI'
+                            'URI',
+                            'JSON >= 2.00'
                        }
 );
+
+print "RPC::JSON needs tests, please consider contributing some!\n";
