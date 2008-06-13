@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                RPC-JSON
-version:             0.12
+version:             0.13
 abstract:            ~
 license:             ~
 generated_by:        ExtUtils::MakeMaker version 6.36

@@ -14,7 +14,7 @@ use URI::Heuristic qw(uf_uri);
 
 use vars qw|$VERSION @EXPORT $DEBUG $META $AUTOLOAD|;
 
-$VERSION = '0.12';
+$VERSION = '0.13';
 
 @RPC::JSON = qw|Exporter|;
 
@@ -344,7 +344,7 @@ sub AUTOLOAD {
             if ( $@ ) {
                 carp "Error parsing server response, but got acceptable status: $@";
             } else {
-                my $result = $ret->{result};
+                my $result = from_json($ret->{result});
                 if ( $result ) {
                     if ( $self->{bindings}->{$l} ) {
                         foreach my $binding ( @{$self->{bindings}->{$l}} ) {

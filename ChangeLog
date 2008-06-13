@@ -1,3 +1,8 @@
+2008-06-13 J. Shirley <jshirley@gmail.com>
+
+	* Update for using from_json for JSON 2.x
+	
+
 2006-06-14 J. Shirley <jshirley@gmail.com>
 
 	* Initial Release
