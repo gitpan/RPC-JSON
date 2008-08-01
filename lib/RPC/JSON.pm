@@ -14,7 +14,7 @@ use URI::Heuristic qw(uf_uri);
 
 use vars qw|$VERSION @EXPORT $DEBUG $META $AUTOLOAD|;
 
-$VERSION = '0.13';
+$VERSION = '0.14';
 
 @RPC::JSON = qw|Exporter|;
 
@@ -82,9 +82,17 @@ my @options = qw|
     smd timeout keepalive env_proxy agent conn_cache max_size dont_connect
 |;
 
+=item new(<smd source>)
+
+Return a new RPC::JSON object for a given SMD source
+
+=cut
+
 sub new {
     my ( $class, @opts ) = @_;
-    my $self = {};
+    my $self = {
+        utf8 => 0,
+    };
 
     unless ( @opts ) {
         carp __PACKAGE__ . " requires at least the SMD URI";
@@ -212,7 +220,7 @@ sub load_smd {
     local $JSON::BareKey  = 1;
     local $JSON::QuotApos = 1;
     my $obj;
-    eval { $obj = from_json($content) };
+    eval { $obj = from_json($content,{ utf8 => $self->is_utf8 }) };
     if ( $@ ) { 
         carp $@;
         return 0;
@@ -245,6 +253,23 @@ sub load_smd {
         };
     }
     return 1;
+}
+
+=item is_utf8
+
+makes the call to from_json utf8 aware (see perldoc JSON)
+
+    $jsonrpc->is_utf8( 1 );
+
+default state is non utf8
+
+=cut
+
+sub is_utf8 {
+
+	my ( $self,$set_utf8 ) = @_;
+	$self->{_utf8} = 1 if ( $set_utf8 );
+	return $self->{_utf8} || 0;
 }
 
 =item service
@@ -301,25 +326,6 @@ sub serviceURI {
     return undef;
 }
 
-sub bind {
-    my ( $self, $method, $obj, $dest_method ) = @_;
-    $self->{bindings} ||= {};
-    if ( $obj and $dest_method ) {
-        $self->{bindings}->{$method} ||= [];
-        push @{$self->{bindings}->{$method}},
-            sub { $obj->$dest_method(@_); };
-    }
-}
-
-sub listen {
-    my ( $self, $method, $dest_method ) = @_;
-    if ( $dest_method ) {
-        $self->{bindings}->{$method} ||= [];
-        push @{$self->{bindings}->{$method}},
-            sub { $dest_method->(@_); };
-    }
-}
-
 # TODO: Remove this and create generated methods.  Although when we refresh
 # the methods will need to be removed.
 sub AUTOLOAD {
@@ -340,19 +346,12 @@ sub AUTOLOAD {
         );
         if ( $res->is_success ) {
             my $ret = {};
-            eval { $ret = from_json($res->content);};
+            eval { $ret = from_json($res->content, { utf8 => $self->is_utf8 }) };
             if ( $@ ) {
                 carp "Error parsing server response, but got acceptable status: $@";
             } else {
-                my $result = from_json($ret->{result});
-                if ( $result ) {
-                    if ( $self->{bindings}->{$l} ) {
-                        foreach my $binding ( @{$self->{bindings}->{$l}} ) {
-                            &{$binding}($result);
-                        }
-                    }
-                    return $result;
-                }
+                my $result = from_json($ret->{result}, { utf8 => $self->is_utf8 });
+                return $result if $result;
             }
         } else {
             carp "Error received from server: " . $res->status_line;
@@ -370,10 +369,11 @@ J. Shirley C<< <jshirley@gmail.com> >>
 =head1 CONTRIBUTORS
 
 Chris Carline
+Lee Johnson
 
 =head1 LICENSE
 
-Copyright 2006 J. Shirley C<< <jshirley@gmail.com> >>
+Copyright 2006-2008 J. Shirley C<< <jshirley@gmail.com> >>
 
 This program is free software;  you can redistribute it and/or modify it under
 the same terms as Perl itself.  That means either (a) the GNU General Public

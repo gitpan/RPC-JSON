@@ -5,7 +5,7 @@ use strict;
 
 use vars qw|$VERSION @EXPORT $DEBUG $META $AUTOLOAD|;
 
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 @RPC::JSON::Shell = qw|Exporter|;
 
@@ -44,6 +44,12 @@ RPC::JSON::Shell - Interactive JSON-RPC Shell
 This module is an interactive client to a JSON-RPC service.  It is currently
 in its infancy and is likely to be very unstable.  There are many bugs in this
 package.
+
+=cut
+
+=item shell
+
+Initiate a shell session
 
 =cut
 
@@ -102,6 +108,12 @@ sub shell {
         }
     }
 }
+
+=item help
+
+Display the help text.
+
+=cut
 
 sub help {
     my ( $class, $out, @args ) = @_;
@@ -190,7 +202,7 @@ sub ls {
     }
 }
 
-=item Method Caller
+=item method Caller
 
 By entering <method> [parameters] the shell will query the Service and display
 results

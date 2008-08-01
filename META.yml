@@ -1,9 +1,9 @@
 --- #YAML:1.0
 name:                RPC-JSON
-version:             0.13
+version:             0.14
 abstract:            ~
 license:             ~
-generated_by:        ExtUtils::MakeMaker version 6.36
+generated_by:        ExtUtils::MakeMaker version 6.32
 distribution_type:   module
 requires:     
     JSON:                          LWP::UserAgent
