@@ -6,10 +6,9 @@ WriteMakefile(
     'NAME'          => 'RPC::JSON',
     'VERSION_FROM'  => 'lib/RPC/JSON.pm',
     PREREQ_PM       => {
-                            'JSON',
-                            'LWP::UserAgent',
-                            'URI',
-                            'JSON >= 2.00'
+                            'LWP::UserAgent' => 0,
+                            'URI', => 0,
+                            'JSON' => 2.00,
                        }
 );
 

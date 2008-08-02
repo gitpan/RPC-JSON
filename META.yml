@@ -1,13 +1,15 @@
 --- #YAML:1.0
 name:                RPC-JSON
-version:             0.14
+version:             0.15
 abstract:            ~
 license:             ~
-generated_by:        ExtUtils::MakeMaker version 6.32
+author:              ~
+generated_by:        ExtUtils::MakeMaker version 6.44
 distribution_type:   module
 requires:     
-    JSON:                          LWP::UserAgent
-    URI:                           JSON >= 2.00
+    JSON:                          2
+    LWP::UserAgent:                0
+    URI:                           0
 meta-spec:
-    url:     http://module-build.sourceforge.net/META-spec-v1.2.html
-    version: 1.2
+    url:     http://module-build.sourceforge.net/META-spec-v1.3.html
+    version: 1.3

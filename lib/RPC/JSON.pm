@@ -14,7 +14,7 @@ use URI::Heuristic qw(uf_uri);
 
 use vars qw|$VERSION @EXPORT $DEBUG $META $AUTOLOAD|;
 
-$VERSION = '0.14';
+$VERSION = '0.15';
 
 @RPC::JSON = qw|Exporter|;
 
